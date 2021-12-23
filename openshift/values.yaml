@@ -1,0 +1,53 @@
+openshift_prometheus_htpasswd_auth: internal:{SHA}+pvrmeQCmtWmYVOZ57uuITVghrM=
+openshift_prometheus_basic_auth_pass: changeme
+extra_prometheus_hosts:
+
+deployment:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/name: pelorus
+    app.kubernetes.io/version: v0.33.0
+
+exporters:
+  instances:
+  - app_name: deploytime-exporter
+    source_context_dir: exporters/
+    extraEnv:
+    - name: APP_FILE
+      value: deploytime/app.py
+    - name: APP_LABEL
+      value: pelorus/app.name
+    - name: NAMESPACES
+      value: project1,project2
+    source_ref: master
+    source_url: http://github.com/jlozano-rh/pelorus.git
+  - app_name: committime-gitlab-exporter
+    env_from_secrets:
+    - gitlab-secret
+    source_context_dir: exporters/
+    extraEnv:
+    - name: APP_FILE
+      value: committime/app.py
+    - name: APP_LABEL
+      value: pelorus/app.name
+    - name: NAMESPACES
+      value: project1,project2
+    - name: GIT_PROVIDER
+      value: gitlab
+    source_ref: master
+    source_url: http://github.com/jlozano-rh/pelorus.git
+  - app_name: committime-bitbucket-exporter
+    env_from_secrets:
+    - bitbucket-secret
+    source_context_dir: exporters/
+    extraEnv:
+    - name: APP_FILE
+      value: committime/app.py
+    - name: APP_LABEL
+      value: pelorus/app.name
+    - name: NAMESPACES
+      value: project1,project2
+    - name: GIT_PROVIDER
+      value: bitbucket
+    source_ref: master
+    source_url: http://github.com/jlozano-rh/pelorus.git

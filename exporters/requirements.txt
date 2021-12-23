@@ -1,0 +1,10 @@
+requests
+prometheus_client
+openshift < 0.12
+jsonpath_ng
+jira
+pytz
+python-gitlab >= 2.4.0
+git-url-parse
+azure-devops
+attrs
